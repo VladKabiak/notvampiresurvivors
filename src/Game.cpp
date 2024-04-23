@@ -2,8 +2,8 @@
 
 Game::Game(sf::RenderWindow &window) :
         m_window(window),
-        m_character(m_window.getSize().x / 2, m_window.getSize().y / 2, 20, m_font),
-        m_experienceBar(m_window.getSize().x / 7, 200),
+        m_character(m_window.getSize().x / 2, m_window.getSize().y / 2, 200, m_font),
+        m_experienceBar(m_window.getSize().x / 7, 20),
         m_inventoryWindow(m_window.getSize().x, m_window.getSize().y),
         m_view(m_window.getDefaultView()),
         m_hudView(m_window.getDefaultView()) {
