@@ -9,6 +9,7 @@
 #include "weapon.h"
 #include "enemy.h"
 #include "InventoryWindow.h"
+#include "Constants.h"
 
 class Character {
 public:

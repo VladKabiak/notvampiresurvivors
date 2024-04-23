@@ -1,8 +1,9 @@
 #include "experiencebar.h"
 
-ExperienceBar::ExperienceBar(float width, float height)
-        : m_background(sf::Vector2f(width, height)),
-          m_fill(sf::Vector2f(0, height)), m_maxWidth(width) {
+ExperienceBar::ExperienceBar(float width, float height):
+    m_background(sf::Vector2f(width, height)),
+    m_fill(sf::Vector2f(0, height)), m_maxWidth(width) {
+
     m_background.setFillColor(sf::Color::White);
     m_background.setOutlineColor(sf::Color::Black);
     m_background.setOutlineThickness(2.0f);
@@ -20,7 +21,6 @@ float ExperienceBar::getProgress() {
 }
 
 void ExperienceBar::setProgress(float progr) {
-    // Прогресс должен быть в диапазоне от 0 до 1
     progress = progr;
 
     // Изменяем ширину заполнения пропорционально прогрессу

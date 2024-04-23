@@ -14,10 +14,11 @@ public:
     float getProgress();
 
 private:
-    sf::RectangleShape m_background; // Фон опыта
-    sf::RectangleShape m_fill;       // Заполнение опыта
-    float m_maxWidth;                 // Максимальная ширина шкалы опыта
+    sf::RectangleShape m_background;
+    sf::RectangleShape m_fill;
+    float m_maxWidth;
     float progress{};
+
 };
 
 #endif // EXPERIENCE_BAR_H

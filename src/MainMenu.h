@@ -3,15 +3,16 @@
 
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include "Constants.h"
 
 class MainMenu {
 public:
-    MainMenu(sf::RenderWindow &window);
+    explicit MainMenu(sf::RenderWindow &window);
 
     void run();
 
 private:
-    sf::RenderWindow m_window;
+    sf::RenderWindow &m_window;
     sf::Texture m_backgroundTexture;
     sf::Sprite m_backgroundSprite;
     sf::Font m_font;
@@ -19,8 +20,10 @@ private:
 
     void render();
     bool handleInput();
-
     void switchToGame();
+    bool isPlayButtonClicked(const int &mouseX, const int &mouseY) const;
+    void initializeBackground();
+    void initializeText();
 };
 
 #endif // MAIN_MENU_H

@@ -1,18 +1,18 @@
 #include "character.h"
-#include <iostream>
-#include <utility>
 
-Character::Character(float x, float y, int health, const sf::Font& font)
-        : m_maxHealth(health), m_weapons(), m_weaponSprite(), m_animationTime(0.0f), ANIMATION_DURATION(0.1f),
-          ATTACK_DISPLAY_DURATION(0.1f) {
+Character::Character(float x, float y, int health, const sf::Font& font):
+    m_maxHealth(health),
+    m_weapons(),
+    m_weaponSprite(),
+    m_animationTime(0.0f),
+    ANIMATION_DURATION(0.1f),
+    ATTACK_DISPLAY_DURATION(0.1f) {
+
     m_sprite.setPosition(x, y);
-
     m_health = m_maxHealth;
 
     // Загрузка текстуры персонажа
-    if (!m_texture.loadFromFile("../assets/textures/Walk.png")) {
-        std::cerr << "Failed to load character texture!" << std::endl;
-    } else {
+    if (m_texture.loadFromFile(WALK_PATH)) {
         for (int i = 0; i < 8; ++i) {
             sf::IntRect frameRect(20 + i * 127, 50, 55, 77);
             m_animationFrames.push_back(frameRect);
@@ -58,7 +58,7 @@ void Character::moveDown(float distance) {
 
 void Character::update(float dt, std::vector<Enemy>& enemies) {
     for (auto& weapon : m_weapons) {
-        weapon.updateAttackTimer(dt);
+        weapon.updateAttackTimer();
     }
 
     m_animationTime += dt;
@@ -93,7 +93,6 @@ void Character::update(float dt, std::vector<Enemy>& enemies) {
             angle = 0.f;
         }
 
-        // Поворачиваем спрайт атаки на соответствующий угол
         m_weaponSprite.setRotation(angle);
 
         m_weaponSprite.setPosition(m_sprite.getPosition());

@@ -2,7 +2,6 @@
 #define INVENTORY_WINDOW_H
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 class InventoryWindow {
 public:

@@ -1,16 +1,17 @@
 #include "enemy.h"
 
-const float ENEMY_SPEED = 0.03f; // Скорость врага
+Enemy::Enemy(float startX, float startY, int health, const sf::Texture &texture):
+    m_health(health),
+    m_lastDamageTime(0.0f),
+    DAMAGE_COOLDOWN(1.0f),
+    m_sprite() {
 
-Enemy::Enemy(float startX, float startY, int health, const sf::Texture &texture)
-        : m_speed(ENEMY_SPEED), m_health(health), m_lastDamageTime(0.0f), DAMAGE_COOLDOWN(1.0f), m_sprite() {
     sf::IntRect enemyRegions[4] = {
             sf::IntRect(164, 34, 42, 30),
             sf::IntRect(210, 34, 40, 29),
             sf::IntRect(255, 40, 48, 40),
             sf::IntRect(384, 0, 31, 31)
     };
-
 
     m_sprite.setTexture(texture);
     m_sprite.setTextureRect(enemyRegions[rand() % 4]);

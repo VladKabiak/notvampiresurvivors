@@ -17,7 +17,7 @@ public:
 
 private:
     sf::CircleShape m_shape;
-    float m_speed;
+    float m_speed = 0.03f;
     int m_health;
     sf::Text m_text;
     float m_lastDamageTime;

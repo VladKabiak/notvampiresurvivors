@@ -14,12 +14,13 @@ public:
 
     bool canAttack() const;
     void resetAttackTimer();
-    void updateAttackTimer(float dt);
+    void updateAttackTimer();
     void attackEnemy(std::vector<Enemy>& enemies, const sf::Vector2f& characterPosition);
     const sf::Sprite &getAvatar();
     std::string getName();
 
 private:
+    const sf::Time ATTACK_INTERVAL = sf::seconds(2.0f);
     bool m_canAttack;
     sf::Sprite m_avatar;
     sf::Clock m_attackClock;

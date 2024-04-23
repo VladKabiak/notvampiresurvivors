@@ -1,9 +1,12 @@
 #include "weapon.h"
 
-const sf::Time ATTACK_INTERVAL = sf::seconds(2.0f);
-
-Weapon::Weapon(const sf::Sprite& avatar, int damage, std::string name)
-        : m_canAttack(true), m_attackClock(), m_attackInterval(ATTACK_INTERVAL), m_avatar(avatar), m_damage(damage), m_name(name) {}
+Weapon::Weapon(const sf::Sprite& avatar, int damage, std::string name):
+    m_canAttack(true),
+    m_attackClock(),
+    m_attackInterval(ATTACK_INTERVAL),
+    m_avatar(avatar),
+    m_damage(damage),
+    m_name(name) {}
 
 bool Weapon::canAttack() const {
     return m_canAttack;
@@ -18,7 +21,7 @@ void Weapon::resetAttackTimer() {
     m_canAttack = false;
 }
 
-void Weapon::updateAttackTimer(float dt) {
+void Weapon::updateAttackTimer() {
     if (m_attackClock.getElapsedTime() >= m_attackInterval) {
         m_canAttack = true;
     }
@@ -29,9 +32,8 @@ std::string Weapon::getName() {
 }
 
 void Weapon::attackEnemy(std::vector<Enemy>& enemies, const sf::Vector2f& characterPosition) {
-    // Для простоты демонстрации, здесь происходит атака по всем врагам на экране
+    // Для простоты демонстрации, здесь происходит атака по радиусу
     for (auto& enemy : enemies) {
-        // Проверяем расстояние между персонажем и врагом
         float distance = sqrt(pow(characterPosition.x - enemy.getPosition().x, 2) +
                               pow(characterPosition.y - enemy.getPosition().y, 2));
         if (distance <= 238) {

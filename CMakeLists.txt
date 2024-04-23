@@ -26,7 +26,7 @@ add_executable(untitled3
         src/InventoryWindow.h
         src/MainMenu.cpp
         src/MainMenu.h
-        # Добавьте здесь Game.cpp
+        src/Constants.h
 )
 
 target_link_libraries(untitled3 sfml-graphics)

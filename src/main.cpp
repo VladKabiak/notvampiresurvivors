@@ -2,7 +2,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "NE Vampire Survivors");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "NE Vampire Survivors", sf::Style::Fullscreen);
 
     MainMenu mainMenu(window);
     mainMenu.run();

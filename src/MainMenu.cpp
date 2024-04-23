@@ -1,13 +1,29 @@
 #include "MainMenu.h"
 
-MainMenu::MainMenu(sf::RenderWindow &window): m_window(window) {
-    m_backgroundTexture.loadFromFile("../assets/textures/textures.png");
+MainMenu::MainMenu(sf::RenderWindow &window):
+        m_window(window),
+        m_backgroundTexture(),
+        m_backgroundSprite(),
+        m_font(),
+        m_playButtonText() {
+
+    initializeBackground();
+    initializeText();
+}
+
+void MainMenu::initializeBackground() {
+    if (!m_backgroundTexture.loadFromFile(TEXTURES_PATH)) {
+        // Можно как-то обрабатывать ошибку, если адрес не правильынй
+    }
     m_backgroundSprite.setTexture(m_backgroundTexture);
-    m_backgroundSprite.setTextureRect(sf::IntRect (640, 800, 384, 224));
-    m_backgroundSprite.setScale(1280.0f / 384.0f, 720.0f / 224.0f);
+    m_backgroundSprite.setTextureRect(sf::IntRect(640, 800, 384, 224));
+    m_backgroundSprite.setScale(m_window.getSize().x / 384.0f, m_window.getSize().y / 224.0f);
+}
 
-    m_font.loadFromFile("../assets/fonts/Arial.ttf");
-
+void MainMenu::initializeText() {
+    if (!m_font.loadFromFile(FONT_PATH)) {
+        // Можно как-то обрабатывать ошибку, если адрес не правильынй
+    }
     m_playButtonText.setFont(m_font);
     m_playButtonText.setString("Play");
     m_playButtonText.setCharacterSize(30);
@@ -23,8 +39,7 @@ void MainMenu::run() {
     while (m_window.isOpen()) {
         render();
         if (handleInput()) {
-            Game game(m_window);
-            game.run();
+            switchToGame();
             return;
         }
     }
@@ -38,23 +53,25 @@ void MainMenu::render() {
 }
 
 bool MainMenu::handleInput() {
-    sf::Event event;
+    sf::Event event{};
     while (m_window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
             m_window.close();
             return false;
         } else if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left) {
-                // Check if the play button is clicked
-                sf::Vector2f mousePos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
-                if (m_playButtonText.getGlobalBounds().contains(mousePos)) {
-                    switchToGame();
-                    return true; // Return true if play button is clicked
+                if (isPlayButtonClicked(event.mouseButton.x, event.mouseButton.y)) {
+                    return true;
                 }
             }
         }
     }
     return false;
+}
+
+bool MainMenu::isPlayButtonClicked(const int &mouseX, const int &mouseY) const {
+    sf::Vector2f mousePos = sf::Vector2f(mouseX, mouseY);
+    return m_playButtonText.getGlobalBounds().contains(mousePos);
 }
 
 void MainMenu::switchToGame() {
