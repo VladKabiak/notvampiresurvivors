@@ -2,10 +2,11 @@
 #define INVENTORY_WINDOW_H
 
 #include <SFML/Graphics.hpp>
+#include "Constants.h"
 
 class InventoryWindow {
 public:
-    InventoryWindow();
+    InventoryWindow(const float &WINDOW_WIDTH, const float &WINDOW_HEIGHT);
 
     void render(sf::RenderWindow& window);
 
