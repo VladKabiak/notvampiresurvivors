@@ -14,30 +14,19 @@
 class Character {
 public:
     Character(float x, float y, int health, const sf::Font& font);
-
     void moveLeft(float distance);
     void moveRight(float distance);
     void moveUp(float distance);
     void moveDown(float distance);
-
     void update(float dt, std::vector<Enemy>& enemies);
-    void attackEnemy(std::vector<Enemy>& enemies);
     void takeDamage(int damage);
-
     void setPosition(float x, float y);
     sf::Vector2f getPosition() const;
     int getHealth() const;
-
-    sf::Text getText() const;
-
-    void updateTextPosition();
-    void updateTextContent();
-
     void render(sf::RenderWindow& window);
     void setWeapon(Weapon* weapons, InventoryWindow &m_inventoryWindow);
+    void setWeaponTexture(sf::Sprite& sprite);
     sf::Sprite getWeaponSprite();
-
-    void setWeaponTexture(sf::Sprite sprite);
 
 private:
     sf::Sprite m_sprite;
@@ -56,6 +45,7 @@ private:
     sf::Time m_attackInterval;
     bool m_canAttack;
     bool isRight = true;
+    bool isPrevRight = true;
     float m_attackDisplayTimer;
     const float ATTACK_DISPLAY_DURATION;
 };

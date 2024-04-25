@@ -15,9 +15,9 @@ public:
 private:
     sf::RectangleShape m_inventoryBackground;
 
-    sf::Texture m_textureFirstRow; // Текстура для первого ряда
+    sf::Texture m_textureFirstRow;
 
-    sf::Sprite m_spritesFirstRow[8]; // Массив спрайтов для первого ряда
+    sf::Sprite m_spritesFirstRow[8];
 
     std::vector<sf::Sprite> m_newSprites;
     int currentIndex = 0;

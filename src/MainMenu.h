@@ -17,6 +17,7 @@ private:
     sf::Sprite m_backgroundSprite;
     sf::Font m_font;
     sf::Text m_playButtonText;
+    sf::Text m_exitButtonText;
 
     void render();
     bool handleInput();
@@ -24,6 +25,8 @@ private:
     bool isPlayButtonClicked(const int &mouseX, const int &mouseY) const;
     void initializeBackground();
     void initializeText();
+
+    bool isExitButtonClicked(const int &mouseX, const int &mouseY) const;
 };
 
 #endif // MAIN_MENU_H

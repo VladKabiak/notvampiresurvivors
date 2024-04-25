@@ -34,20 +34,22 @@ private:
     bool m_running = true;
     sf::Texture m_textures;
     Weapon allWeapons[5] = {
-            Weapon(sf::Sprite(m_textures, sf::IntRect(16, 80, 15, 15)), 10, "Knout"),
-            Weapon(sf::Sprite(m_textures, sf::IntRect(32, 80, 15, 15)), 20, "Sphere"),
-            Weapon(sf::Sprite(m_textures, sf::IntRect(48, 80, 15, 15)), 30, "Axe"),
-            Weapon(sf::Sprite(m_textures, sf::IntRect(64, 80, 15, 15)), 40, "Club"),
-            Weapon(sf::Sprite(m_textures, sf::IntRect(80, 80, 15, 15)), 5, "Ring")
+            Weapon(sf::Sprite(m_textures, sf::IntRect(16, 80, 15, 15)), 8, "Knout"),
+            Weapon(sf::Sprite(m_textures, sf::IntRect(32, 80, 15, 15)), 16, "Sphere"),
+            Weapon(sf::Sprite(m_textures, sf::IntRect(48, 80, 15, 15)), 22, "Axe"),
+            Weapon(sf::Sprite(m_textures, sf::IntRect(64, 80, 15, 15)), 26, "Club"),
+            Weapon(sf::Sprite(m_textures, sf::IntRect(80, 80, 15, 15)), 7, "Ring")
     };
     float CHARACTER_SPEED = 0.2f;
     float GETTING_EXP_RADIUS = 50.f;
     float EXP_CELL = 0.1f;
     float CHAR_MAX_HP = 200.f;
-    sf::Time ENEMY_SPAWN_INTERVAL = sf::seconds(0.1f);
+    sf::Time ENEMY_SPAWN_INTERVAL = sf::seconds(0.5f);
+    sf::RenderTexture m_bgImage;
+    sf::Clock m_gameTimer;
 
 
-
+    void createBgImage(sf::Sprite& sprite, sf::RenderTexture &BT, const float &WINDOW_WIDTH, const float &WINDOW_HEIGHT);
     void processEvents();
     void update();
     void render();
@@ -62,11 +64,8 @@ private:
     void handleUpgradeButtonClick(const int &mouseX, const int &mouseY, const std::vector<std::string> &upgradeOptions);
     std::vector<std::string> generateUpgradeOptions();
     sf::RectangleShape createUpgradeWindow();
-
     void drawButton(const sf::RectangleShape &button, const sf::Text &buttonText);
-
     sf::Text createButtonText(const std::string &text, const sf::RectangleShape &button);
-
     sf::RectangleShape createButton(float posX, float posY);
 };
 

@@ -17,6 +17,12 @@ Game::Game(sf::RenderWindow &window) :
 
     m_experienceBar.setPosition((m_window.getSize().x - m_experienceBar.getSize().x) / 2, 50);
     m_character.setWeapon(allWeapons, m_inventoryWindow);
+
+    sf::Sprite bgSprite;
+    bgSprite.setTexture(m_textures);
+    bgSprite.setTextureRect(sf::IntRect(96, 63, 65, 65));
+    m_bgImage.create(m_window.getSize().x * 17, m_window.getSize().y * 17);
+    createBgImage(bgSprite, m_bgImage, m_window.getSize().x, m_window.getSize().y);
 }
 
 void Game::run() {
@@ -39,6 +45,14 @@ void Game::update() {
     if (m_running) {
         float dt = m_clock.restart().asSeconds();
         m_character.update(dt, m_enemies);
+
+        sf::Time elapsedTime = m_gameTimer.getElapsedTime();
+
+
+        if (elapsedTime.asSeconds() >= 60) {
+            ENEMY_SPAWN_INTERVAL *= 0.8f;
+            m_gameTimer.restart();
+        }
 
         // Обработка перемещения персонажа
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
@@ -111,46 +125,39 @@ void Game::update() {
 
             m_enemySpawnClock.restart();
         }
-
-        m_view.setCenter(m_character.getPosition());
     }
-}
 
+    // Обновляем позицию камеры, чтобы следовать за персонажем
+    sf::Vector2f characterPosition = m_character.getPosition();
+    m_view.setCenter(characterPosition);
+}
 
 void Game::render() {
     if (m_running) {
         m_window.clear();
-
         m_window.setView(m_view);
-        sf::RenderTexture backgroundTexture;
-        backgroundTexture.create(m_window.getSize().x, m_window.getSize().y);
 
-        sf::Sprite sprite;
-        sprite.setTexture(m_textures);
-        sprite.setTextureRect(sf::IntRect(96, 63, 65, 65));
-
-        int repeatX = m_window.getSize().x / 60;
-        int repeatY = m_window.getSize().y / 60;
-
-        for (int i = 0; i < repeatX; ++i) {
-            for (int j = 0; j < repeatY; ++j) {
-                sprite.setPosition(i * 60, j * 60);
-                backgroundTexture.draw(sprite);
-            }
-        }
-
-        backgroundTexture.display();
-        sf::Sprite backgroundSprite(backgroundTexture.getTexture());
-
+        int offsetX = m_character.getPosition().x - m_window.getSize().x / 2;
+        int offsetY = m_character.getPosition().y - m_window.getSize().y / 2;
+        sf::Sprite backgroundSprite(m_bgImage.getTexture(), sf::IntRect (m_bgImage.getTexture().getSize().x / 2 - m_window.getSize().x / 2 + offsetX,
+                                                                         m_bgImage.getTexture().getSize().y / 2 - m_window.getSize().y / 2 + offsetY,
+                                                                         m_window.getSize().x,
+                                                                         m_window.getSize().y));
+        backgroundSprite.setPosition(m_character.getPosition().x - m_window.getSize().x / 2,
+                                     m_character.getPosition().y - m_window.getSize().y / 2);
         m_window.draw(backgroundSprite);
 
+        sf::Time elapsedTime = m_gameTimer.getElapsedTime();
+        sf::Text timerText("Time: " + std::to_string(static_cast<int>(elapsedTime.asSeconds())) + "s", m_font, 20);
+        timerText.setFillColor(sf::Color::White);
+        timerText.setPosition(m_window.getSize().x - timerText.getGlobalBounds().width - 20, 50);
 
         m_character.render(m_window);
 
         m_window.draw(m_character.getWeaponSprite());
 
-        for (Enemy enemy : m_enemies) {
-            m_window.draw(enemy.getSprite());
+        for (Enemy& enemy : m_enemies) {
+            enemy.render(m_window);
         }
 
         for (auto& exp : m_experience) {
@@ -160,7 +167,7 @@ void Game::render() {
         m_window.setView(m_hudView);
         m_experienceBar.render(m_window);
         m_inventoryWindow.render(m_window);
-
+        m_window.draw(timerText);
         m_window.display();
     }
 }
@@ -169,7 +176,7 @@ bool Game::collisionDetected(Character &character, Enemy &enemy) {
     sf::Vector2f characterPosition = character.getPosition();
     sf::Vector2f enemyPosition = enemy.getPosition();
     float distance = std::sqrt(std::pow(characterPosition.x - enemyPosition.x, 2) + std::pow(characterPosition.y - enemyPosition.y, 2));
-    return distance <= 100;
+    return distance <= 40;
 }
 
 void Game::openUpgradeWindow() {
@@ -363,6 +370,19 @@ void Game::handleUpgradeButtonClick(const int &mouseX, const int &mouseY, const 
             applyUpgrade(upgradeOptions[i]);
             resumeGame();
             return;
+        }
+    }
+}
+
+void Game::createBgImage(sf::Sprite& sprite, sf::RenderTexture &BT,  const float &WINDOW_WIDTH, const float &WINDOW_HEIGHT) {
+
+    int repeatX = WINDOW_WIDTH*17 / 60;
+    int repeatY = WINDOW_HEIGHT*17 / 60;
+
+    for (int i = 0; i < repeatX; ++i) {
+        for (int j = 0; j < repeatY; ++j) {
+            sprite.setPosition(i * 60, j * 60);
+            BT.draw(sprite);
         }
     }
 }

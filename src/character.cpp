@@ -14,8 +14,12 @@ Character::Character(float x, float y, int health, const sf::Font& font):
     // Загрузка текстуры персонажа
     if (m_texture.loadFromFile(WALK_PATH)) {
         for (int i = 0; i < 8; ++i) {
-            sf::IntRect frameRect(20 + i * 127, 50, 55, 77);
+            sf::IntRect frameRect(30 + i * 127, 65, 55, 77);
             m_animationFrames.push_back(frameRect);
+
+            int revertedIndex = 7 - i;
+            sf::IntRect frameRect2(35 + revertedIndex * 127, 50+128, 55, 77);
+            m_animationFrames.push_back(frameRect2);
         }
 
         m_currentFrame = 0;
@@ -64,15 +68,23 @@ void Character::update(float dt, std::vector<Enemy>& enemies) {
     m_animationTime += dt;
 
     if (m_animationTime >= ANIMATION_DURATION) {
-        m_currentFrame = (m_currentFrame + 1) % m_animationFrames.size();
+        if (isRight) {
+            if (isPrevRight){
+                m_currentFrame = (m_currentFrame + 2) % m_animationFrames.size();
+            } else {
+                m_currentFrame = (m_currentFrame + 1) % m_animationFrames.size();
+                isPrevRight = true;
+            }
+        } else {
+            if (isPrevRight){
+                m_currentFrame = (m_currentFrame + 1) % m_animationFrames.size();
+                isPrevRight = false;
+            } else {
+                m_currentFrame = (m_currentFrame + 2) % m_animationFrames.size();
+            }
+        }
         m_sprite.setTextureRect(m_animationFrames[m_currentFrame]);
         m_animationTime = 0.0f;
-    }
-
-    if (!isRight) {
-        m_sprite.setScale(-1.f, 1.f);
-    } else {
-        m_sprite.setScale(1.f, 1.f);
     }
 
     if (m_weapons.front().canAttack()) {
@@ -103,7 +115,7 @@ void Character::update(float dt, std::vector<Enemy>& enemies) {
         m_attackDisplayTimer -= dt;
 
         if (m_attackDisplayTimer <= 0.0f) {
-            m_weaponSprite.setPosition(m_sprite.getPosition().x-1000, m_sprite.getPosition().y-1000);
+            m_weaponSprite.setPosition(m_sprite.getPosition().x-5000, m_sprite.getPosition().y-5000);
         }
     }
 }
@@ -139,13 +151,13 @@ void Character::render(sf::RenderWindow& window) {
     sf::RectangleShape healthBarFill(sf::Vector2f(filledWidth, 8));
     healthBarFill.setFillColor(sf::Color(181, 63, 101));
 
-    healthBarOutline.setPosition(m_sprite.getPosition().x - healthBarOutline.getSize().x / 2, m_sprite.getPosition().y - 15);
+    healthBarOutline.setPosition(m_sprite.getPosition().x - healthBarOutline.getSize().x / 2 + 30, m_sprite.getPosition().y - 15);
     healthBarFill.setPosition(healthBarOutline.getPosition().x + 2, healthBarOutline.getPosition().y + 2);
 
     window.draw(healthBarOutline);
     window.draw(healthBarFill);
 }
 
-void Character::setWeaponTexture(sf::Sprite sprite) {
+void Character::setWeaponTexture(sf::Sprite &sprite) {
     m_weaponSprite = std::move(sprite);
 }
