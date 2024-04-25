@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.28)
-project(untitled3)
+cmake_minimum_required(VERSION 3.16)
+project(notvampiresurvivors-main)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -10,7 +11,7 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 
-add_executable(untitled3
+add_executable(notvampiresurvivors-main
         src/main.cpp
         src/Game.cpp
         src/Game.h
@@ -31,4 +32,7 @@ add_executable(untitled3
         src/Constants.h
 )
 
-target_link_libraries(untitled3 sfml-graphics)
+target_link_libraries(notvampiresurvivors-main PRIVATE sfml-graphics)
+target_compile_features(notvampiresurvivors-main PRIVATE cxx_std_17)
+
+install(TARGETS notvampiresurvivors-main)
